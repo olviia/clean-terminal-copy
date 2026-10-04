@@ -1,0 +1,63 @@
+● Good news: your Rider is 2026.2.2. It's installed in the folder
+  still named "Rider 2025.2", because it updated in place. Its
+  terminal has a copy action with the ID Terminal.CopySelectedText,
+  and that's what the design below builds on.
+
+  Design idea: don't override Ctrl+C, listen to it
+
+  Instead of taking over Ctrl+C, we let Rider handle it exactly as
+  now: copy when text is selected, interrupt when nothing is. Rider
+  announces every action it runs, and our plugin listens for that
+  announcement. When the action was a terminal copy, we clean the
+  clipboard right after. This removes the Ctrl+C risk completely,
+  because we never touch the shortcut. This is the Observer pattern:
+  we react to an event without changing the code that raises it.
+
+  CRC cards
+
+  IndentStripper (core)
+  - Responsibility: knows the rules for turning raw terminal text
+    into clean text.
+  - Collaborators: none. It's pure text in, text out, with no Rider
+    dependency, so it's easy to test and reusable anywhere.
+
+  TerminalCopyListener (adapter)
+  - Responsibility: knows which actions count as a terminal copy, and
+    decides when to clean.
+  - Collaborators: IndentStripper, and Rider's clipboard
+    (CopyPasteManager).
+
+  plugin.xml (wiring)
+  - Responsibility: registers the listener with Rider.
+  - Collaborators: none.
+
+  It's the same hexagonal shape as before: a pure core, plus a thin
+  adapter for each outside system.
+
+  Before any code: what does "clean" mean exactly?
+
+  This is the IndentStripper's real job, so let's define it with
+  examples:
+  - Remove the shared indentation only, or all leading spaces?
+    Shared-only keeps the relative indentation inside code blocks.
+    I'd suggest that.
+  - Trailing padding spaces: remove them, I assume.
+  - Claude's ● bullet at the start of a message: strip it?
+  - Lines Claude wraps itself, where one long sentence breaks into
+    indented lines: re-join them? This is harder to get right.
+
+  The best input is real data. Copy two or three messy selections
+  from this chat, for example a paragraph, a list and a code path,
+  and paste them into a file. They become our test cases.
+
+  Location and sharing
+
+  I'd suggest D:\Projects\clean-terminal-copy\, with a public GitHub
+  repo, an MIT license, and later the JetBrains Marketplace. That
+  name is a placeholder, so pick your own if you like. Developing it
+  in public from day one also costs nothing extra.
+
+  Answer the "clean" questions and tell me the folder name. Then you
+  or I create the empty classes, and we write their comments from the
+  cards.
+

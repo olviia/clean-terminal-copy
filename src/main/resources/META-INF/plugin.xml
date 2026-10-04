@@ -1,0 +1,30 @@
+<idea-plugin>
+    <id>io.github.olviia.clean-terminal-copy</id>
+    <name>Clean Terminal Copy</name>
+    <vendor url="https://github.com/olviia/clean-terminal-copy">Olviia Stroivans</vendor>
+
+    <description><![CDATA[
+    Copying text from the IDE terminal, e.g. replies of Claude Code or other CLI agents,
+    brings along the layout of the terminal: a margin of spaces in front of every line and
+    hard line breaks wherever the text wrapped at the terminal width.
+    <br/><br/>
+    This plugin cleans the clipboard right after you copy from the terminal (Ctrl+C or the
+    context menu Copy). It
+    <ul>
+        <li>removes the margin shared by all lines, keeping relative indentation;</li>
+        <li>re-joins lines that were wrapped only because the terminal was too narrow,
+            including wrapped list items;</li>
+        <li>drops trailing padding spaces and the agent's leading message bullet (&#9679;).</li>
+    </ul>
+    Nothing changes about Ctrl+C itself: with no selection it still interrupts.
+    ]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <applicationListeners>
+        <listener class="io.github.olviia.cleanterminalcopy.TerminalCopyListener"
+                  topic="com.intellij.openapi.actionSystem.ex.AnActionListener"/>
+        <listener class="io.github.olviia.cleanterminalcopy.TerminalCopyKeyWatcher"
+                  topic="com.intellij.ide.AppLifecycleListener"/>
+    </applicationListeners>
+</idea-plugin>

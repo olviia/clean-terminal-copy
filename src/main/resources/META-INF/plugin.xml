@@ -17,7 +17,11 @@
         <li>drops trailing padding spaces and the agent's leading message bullet (&#9679;).</li>
     </ul>
     Nothing changes about Ctrl+C itself: with no selection it still interrupts.
+    <br/><br/>
+    <i>Tested on Rider 2026.2 (Claude Code tab). Should work in any JetBrains IDE terminal.</i>
     ]]></description>
+
+    <change-notes><![CDATA[1.0.0: first Marketplace release, plugin icon.]]></change-notes>
 
     <depends>com.intellij.modules.platform</depends>
 
